@@ -34,7 +34,11 @@ def calc_Diffcoef20(Massl, Massh, A , B, mu_solv, nul, nuh):
     Returns
     -------
     calc_Diffcoef20 : float
+<<<<<<< HEAD
+    The diffusion coefficient at 20 degrees celcium
+=======
     The diffusion coefficient at 20 degrees celcium, [m**2/s]
+>>>>>>> master
     References
     ----------
     Романков, страница 289, формула 6.22
@@ -42,6 +46,8 @@ def calc_Diffcoef20(Massl, Massh, A , B, mu_solv, nul, nuh):
     return 1e-6 * ((1/Massl) + (1/Massh))**0.5 / (A * B * mu_solv**0.5 * ((nul)**0.66 + (nuh)*0.66)**2)
 
 
+<<<<<<< HEAD
+=======
 
 def calc_Diffliq(calc_Diffcoef20, b, t_boil)
  """
@@ -63,3 +69,4 @@ def calc_Diffliq(calc_Diffcoef20, b, t_boil)
     Романков, страница 289, формула 6.23
     """
     return calc_Diffcoef20 * (1 + b * (t_boil - 20))
+>>>>>>> master
