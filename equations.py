@@ -42,8 +42,8 @@ def calc_Diffcoef20(Massl, Massh, A , B, mu_solv, nul, nuh):
     return 1e-6 * ((1/Massl) + (1/Massh))**0.5 / (A * B * mu_solv**0.5 * ((nul)**0.66 + (nuh)*0.66)**2)
 
 
-def b(mul_mix, rhol_mix)
-"""
+def b(mul_mix, rhol_mix):
+    """
     Calculates the temperature coefficient.
     Parameters
     ----------
@@ -62,8 +62,8 @@ def b(mul_mix, rhol_mix)
     return mul_mix**0.5/rhol_mix**0.66
 
 
-def calc_Diffliq(calc_Diffcoef20, b, t_boil)
- """
+def calc_Diffliq(calc_Diffcoef20, b, t_boil):
+    """
     Calculates the diffusion coefficient of liquid phaze.
     Parameters
     ----------
@@ -82,4 +82,33 @@ def calc_Diffliq(calc_Diffcoef20, b, t_boil)
     Романков, страница 289, формула 6.23
     """
     return calc_Diffcoef20 * (1 + b * (t_boil - 20))
+
+
+@unitcheck(t_boil="K", Massl="g/mol", Massh="g/mol", P_abs="Pa", nul="sm**3/mol", nuh="sm**3/mol", res_unit="m**2/s")
+def calc_Diffvapor(t_boil, P_abs, Massl, Massh, nul, nuh):
+    """
+    Calculates the diffusion coefficient of vapor.
+    Parameters
+    ----------
+    Massl : float
+    The molar mass of the low-boilling component, [g/mol]
+    Massh : float
+    The molar mass of the high-boilling component, [g/mol]
+    t_boil : float
+    The boiling temperature of the low-boiling component, [K]
+    P : float
+    The absolute pressure of the column, [Pa]
+    nul : float
+    The molar volume of solute, [sm**3/s]
+    nuh : float
+    The molar volume of solvent, [sm**3/s]
+    Returns
+    -------
+    calc_Diffvapor : float
+    The diffusion coefficient of vapor, [m**2/s]
+    References
+    ----------
+    Романков, страница 234, формула 6.25
+    """
+    return 4.22e-2 * t_boil**(3/2) * ((1/Massl) + (1/Massh))**0.5 / (P_abs * ((nul)**0.66 + (nuh)*0.66)**2)
 
