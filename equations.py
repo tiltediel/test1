@@ -42,15 +42,15 @@ def calc_Diffcoef20(Massl, Massh, A , B, mu_solv, nul, nuh):
     return 1e-6 * ((1/Massl) + (1/Massh))**0.5 / (A * B * mu_solv**0.5 * ((nul)**0.66 + (nuh)*0.66)**2)
 
 
-def b(mul_mix, rhol_mix):
+def b(mul_20, rhol_20):
     """
     Calculates the temperature coefficient.
     Parameters
     ----------
-    mul_mix : float
-    The viscocity of low-boilling component of liquid, [Pa/s]
-    rhol_mix : float
-    The destinity of low-boilling component of liquid, [kg/m**3]
+    mul_20 : float
+    The viscocity of low-boilling component of liquid at 20 degrees celcium, [Pa/s]
+    rhol_20 : float
+    The destinity of low-boilling component of liquid at 20 degrees celcium, [kg/m**3]
     Returns
     -------
     b : float
@@ -59,7 +59,7 @@ def b(mul_mix, rhol_mix):
     ----------
     Романков, страница 289, формула 6.24
     """
-    return mul_mix**0.5/rhol_mix**0.66
+    return mul_20**0.5/rhol_20**0.66
 
 
 def calc_Diffliq(calc_Diffcoef20, b, t_boil):
@@ -111,4 +111,117 @@ def calc_Diffvapor(t_boil, P_abs, Massl, Massh, nul, nuh):
     Романков, страница 234, формула 6.25
     """
     return 4.22e-2 * t_boil**(3/2) * ((1/Massl) + (1/Massh))**0.5 / (P_abs * ((nul)**0.66 + (nuh)*0.66)**2)
+
+
+@unitcheck(q_liq="m**2/s", h_septum="m", w_oper="m/s", mu_mix="Pa/s", sigma_mix="N/m", sigma_water="N/m", res_unit="m")
+def heigth_layer(q_liq, h_septum, w_oper, m_coef, mu_mix, sigma_mix, sigma_water):
+    """
+    Calculates the heigth ligth layer of  the liquid.
+    Parameters
+    ----------
+    q_liq : float
+    The specific flow rate of the liquid for 1 m of drain septum, [m**2/s]
+    h_septum : float
+    The heigth of drain septum, [m]
+    w_oper : float
+    The operating speed in the column, [m/s]
+    mu_mix : float
+    The viscocity of mix [Pa/s]
+    m_coef : float
+    The specific coefficient for this equation [dimensionless]
+    sigma_mix : float
+    The surface tension of mix [N/m]
+    sigma_water : float
+    The surface tension of water [N/m]
+    Returns
+    -------
+    heigth_layer : float
+    The heigth ligth layer of  the liquid, [m]
+    References
+    ----------
+    Дытнерский, страница 239, формула 6.39
+    """
+    return 0.787 * q_liq**0.2 * h_septum**0.56 * w_oper**m_coef * (1 - 0.31 * np.exp(-0.11 * mu_mix)) * (sigma_mix/sigma_water)**0.09
+
+
+def m_coef(h_septum):
+    """
+    Calculates the specific coefficient for calculation the heigth ligth layer of liquid equation.
+    Parameters
+    ----------
+    h_septum : float
+    The heigth of drain septum, [m]
+    Returns
+    -------
+    m_coef : float
+    The specific coefficient for this equation [dimensionless]
+    References
+    ----------
+    Дытнерский, страница 239, формула 6.39
+    """
+    return 0.05 - h_septum*4.6
+
+
+@unitcheck(rho_mix="kg/m**3", flate_liq="kg/s", L_septum="m", res_unit="m**2/s")
+def q_liq(rho_mix, L_septum, flate_liq):
+    """
+    Calculates the specific flow rate of the liquid for 1 m of drain septum
+    Parameters
+    ----------
+    rho_mix : float
+    The destiny of mix, [kg/m**3]
+    flate_liq : float
+    The flow rate of liquid [kg/s]
+    L_septum : float
+    The length of drain septum [m]
+    Returns
+    -------
+    q_liq : float
+    The specific flow rate of the liquid for 1 m of drain septum, [m**2/s]
+    References
+    ----------
+    Дытнерский, страница 239, формула 6.39
+    """
+    return flate_liq / (rho_mix * L_septum)
+
+
+def epsi_vapor(Fr):
+    """
+    Calculates the vapor content of bubble layer
+    Parameters
+    ----------
+    Fr : float
+    The Frudo criterion, [dimensionless]
+    Returns
+    -------
+    epsi_vapor : float
+    The vapor content of bubble layer, [dimensionless]
+    References
+    ----------
+    Дытнерский, страница 207, формула 5.47
+    """
+    return Fr**0.5 / (1 + Fr**0.5) 
+
+
+def Fr(w_oper, g, heigth_layer):
+    """
+    Calculates the Frudo criterion
+    Parameters
+    ----------
+    w_oper : float
+    The operating speed in the column, [m/s]
+    heigth_layer : float
+    The heigth ligth layer of  the liquid, [m]
+    g : float
+    The gravitational acceleration, [m/s**2]
+    Returns
+    -------
+    Fr : float
+    The Frudo criterion, [dimensionless]
+    References
+    ----------
+    Дытнерский, страница 240
+    """
+    return w_oper**2 / (g * heigth_layer)
+
 
