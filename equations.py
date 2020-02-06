@@ -225,3 +225,42 @@ def Fr(w_oper, g, heigth_layer):
     return w_oper**2 / (g * heigth_layer)
 
 
+@unitcheck(H_bwplate="m", h_bubble="m", res_unit="m")
+def H_separate(H_bwplate, h_bubble):
+    """
+    Calculates the heigth of separation space.
+    Parameters
+    ----------
+    H_bwplate : float
+    The heigth of between plates, [m]
+    h_bubble : float
+    The heigth of bubble layer, [m]
+    Returns
+    -------
+    H_separate : float
+    The heigth of separation space. [m]
+    References
+    ----------
+    Дытнерский, страница 242, формула 6.42
+    """    
+    return H_bwplate - h_bubble
+
+
+def h_bubble(heigth_layer, epsi_vapor):
+    """
+    Calculates the heigth of bubble layer.
+    Parameters
+    ----------
+    epsi_vapor : float
+    The vapor content of bubble layer, [dimensionless]
+    heigth_layer : float
+    The heigth ligth layer of  the liquid, [m]
+    Returns
+    -------
+    h_bubble : float
+    The heigth of of bubble layer. [m]
+    References
+    ----------
+    Дытнерский, страница 242
+    """
+    return heigth_layer / (1 - epsi_vapor)
