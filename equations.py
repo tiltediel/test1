@@ -1,4 +1,5 @@
 from rectification.utils import unitcheck
+from scipy.constants import g
 import numpy as np
 
 
@@ -18,23 +19,23 @@ def calc_Diffcoef20(Massl, Massh, A , B, mu_solv, nul, nuh):
     Parameters
     ----------
     Massl : float
-    The molar mass of low-boilling component, [g/mol]
+        The molar mass of low-boilling component, [g/mol]
     Massh : float
-    The molar mass of high-boilling component, [g/mol]
+        The molar mass of high-boilling component, [g/mol]
     A : float
-    The correction coefficient depending on the properties solute, [dimensionless]
+        The correction coefficient depending on the properties solute, [dimensionless]
     B : float
-    The correction coefficient depending on the properties solvent, [dimensionless]
+        The correction coefficient depending on the properties solvent, [dimensionless]
     mu_solv : float
-    The viscocity of solvent liquid, [Pa/s]
+        The viscocity of solvent liquid, [Pa/s]
     nul : float
-    The molar volume of solute, [sm**3/s]
+        The molar volume of solute, [sm**3/s]
     nuh : float
-    The molar volume of solvent, [sm**3/s]
+        The molar volume of solvent, [sm**3/s]
     Returns
     -------
     calc_Diffcoef20 : float
-    The diffusion coefficient at 20 degrees celcium, [m**2/s]
+        The diffusion coefficient at 20 degrees celcium, [m**2/s]
     References
     ----------
     Романков, страница 289, формула 6.22
@@ -48,13 +49,13 @@ def b(mul_20, rhol_20):
     Parameters
     ----------
     mul_20 : float
-    The viscocity of low-boilling component of liquid at 20 degrees celcium, [Pa/s]
+        The viscocity of low-boilling component of liquid at 20 degrees celcium, [Pa/s]
     rhol_20 : float
-    The destinity of low-boilling component of liquid at 20 degrees celcium, [kg/m**3]
+        The destinity of low-boilling component of liquid at 20 degrees celcium, [kg/m**3]
     Returns
     -------
     b : float
-    The temperature coefficient, [dimensionless]
+        The temperature coefficient, [dimensionless]
     References
     ----------
     Романков, страница 289, формула 6.24
@@ -68,15 +69,15 @@ def calc_Diffliq(calc_Diffcoef20, b, t_boil):
     Parameters
     ----------
     calc_Diffcoef20 : float
-    The diffusion coefficient at 20 degrees celcium, [m**2/s]
+        The diffusion coefficient at 20 degrees celcium, [m**2/s]
     b : float
-    The temperature coefficient, [dimensionless]
+        The temperature coefficient, [dimensionless]
     t_boil : float
-    The temperature of low-boilling component of liquid, [degrees celcium]
+        The temperature of low-boilling component of liquid, [degrees celcium]
     Returns
     -------
     calc_Diffliq : float
-    The diffusion coefficient of liquid phaze.
+        The diffusion coefficient of liquid phaze.
     References
     ----------
     Романков, страница 289, формула 6.23
@@ -91,21 +92,21 @@ def calc_Diffvapor(t_boil, P_abs, Massl, Massh, nul, nuh):
     Parameters
     ----------
     Massl : float
-    The molar mass of the low-boilling component, [g/mol]
+        The molar mass of the low-boilling component, [g/mol]
     Massh : float
-    The molar mass of the high-boilling component, [g/mol]
+        The molar mass of the high-boilling component, [g/mol]
     t_boil : float
-    The boiling temperature of the low-boiling component, [K]
+        The boiling temperature of the low-boiling component, [K]
     P : float
-    The absolute pressure of the column, [Pa]
+        The absolute pressure of the column, [Pa]
     nul : float
-    The molar volume of solute, [sm**3/s]
+        The molar volume of solute, [sm**3/s]
     nuh : float
-    The molar volume of solvent, [sm**3/s]
+        The molar volume of solvent, [sm**3/s]
     Returns
     -------
     calc_Diffvapor : float
-    The diffusion coefficient of vapor, [m**2/s]
+        The diffusion coefficient of vapor, [m**2/s]
     References
     ----------
     Романков, страница 234, формула 6.25
@@ -120,23 +121,23 @@ def heigth_layer(q_liq, h_septum, w_oper, m_coef, mu_mix, sigma_mix, sigma_water
     Parameters
     ----------
     q_liq : float
-    The specific flow rate of the liquid for 1 m of drain septum, [m**2/s]
+        The specific flow rate of the liquid for 1 m of drain septum, [m**2/s]
     h_septum : float
-    The heigth of drain septum, [m]
+        The heigth of drain septum, [m]
     w_oper : float
-    The operating speed in the column, [m/s]
+        The operating speed in the column, [m/s]
     mu_mix : float
-    The viscocity of mix [Pa/s]
+        The viscocity of mix [Pa/s]
     m_coef : float
     The specific coefficient for this equation [dimensionless]
     sigma_mix : float
-    The surface tension of mix [N/m]
+        The surface tension of mix [N/m]
     sigma_water : float
-    The surface tension of water [N/m]
+        The surface tension of water [N/m]
     Returns
     -------
     heigth_layer : float
-    The heigth ligth layer of  the liquid, [m]
+        The heigth ligth layer of  the liquid, [m]
     References
     ----------
     Дытнерский, страница 239, формула 6.39
@@ -150,11 +151,11 @@ def m_coef(h_septum):
     Parameters
     ----------
     h_septum : float
-    The heigth of drain septum, [m]
+        The heigth of drain septum, [m]
     Returns
     -------
     m_coef : float
-    The specific coefficient for this equation [dimensionless]
+        The specific coefficient for this equation [dimensionless]
     References
     ----------
     Дытнерский, страница 239, формула 6.39
@@ -169,15 +170,15 @@ def q_liq(rho_mix, L_septum, flate_liq):
     Parameters
     ----------
     rho_mix : float
-    The destiny of mix, [kg/m**3]
+        The destiny of mix, [kg/m**3]
     flate_liq : float
-    The flow rate of liquid [kg/s]
+        The flow rate of liquid [kg/s]
     L_septum : float
-    The length of drain septum [m]
+        The length of drain septum [m]
     Returns
     -------
     q_liq : float
-    The specific flow rate of the liquid for 1 m of drain septum, [m**2/s]
+        The specific flow rate of the liquid for 1 m of drain septum, [m**2/s]
     References
     ----------
     Дытнерский, страница 239, формула 6.39
@@ -191,11 +192,11 @@ def epsi_vapor(Fr):
     Parameters
     ----------
     Fr : float
-    The Frudo criterion, [dimensionless]
+        The Frudo criterion, [dimensionless]
     Returns
     -------
     epsi_vapor : float
-    The vapor content of bubble layer, [dimensionless]
+        The vapor content of bubble layer, [dimensionless]
     References
     ----------
     Дытнерский, страница 207, формула 5.47
@@ -203,21 +204,19 @@ def epsi_vapor(Fr):
     return Fr**0.5 / (1 + Fr**0.5) 
 
 
-def Fr(w_oper, g, heigth_layer):
+def Fr(w_oper, heigth_layer):
     """
     Calculates the Frudo criterion
     Parameters
     ----------
     w_oper : float
-    The operating speed in the column, [m/s]
+        The operating speed in the column, [m/s]
     heigth_layer : float
-    The heigth ligth layer of  the liquid, [m]
-    g : float
-    The gravitational acceleration, [m/s**2]
+        The heigth ligth layer of  the liquid, [m]
     Returns
     -------
     Fr : float
-    The Frudo criterion, [dimensionless]
+        The Frudo criterion, [dimensionless]
     References
     ----------
     Дытнерский, страница 240
@@ -229,16 +228,17 @@ def Fr(w_oper, g, heigth_layer):
 def H_separate(H_bwplate, h_bubble):
     """
     Calculates the heigth of separation space.
+
     Parameters
     ----------
     H_bwplate : float
-    The heigth of between plates, [m]
+        The heigth of between plates, [m]
     h_bubble : float
-    The heigth of bubble layer, [m]
+        The heigth of bubble layer, [m]
     Returns
     -------
     H_separate : float
-    The heigth of separation space. [m]
+        The heigth of separation space. [m]
     References
     ----------
     Дытнерский, страница 242, формула 6.42
@@ -252,13 +252,13 @@ def h_bubble(heigth_layer, epsi_vapor):
     Parameters
     ----------
     epsi_vapor : float
-    The vapor content of bubble layer, [dimensionless]
+        The vapor content of bubble layer, [dimensionless]
     heigth_layer : float
-    The heigth ligth layer of  the liquid, [m]
+        The heigth ligth layer of  the liquid, [m]
     Returns
     -------
     h_bubble : float
-    The heigth of of bubble layer. [m]
+        The heigth of of bubble layer. [m]
     References
     ----------
     Дытнерский, страница 242
